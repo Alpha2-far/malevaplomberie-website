@@ -538,9 +538,15 @@ a {
 
 @media (max-width: 767px) {
   .marquee-col--md, .marquee-col--lg { display: none; }
+  .marquee-col {
+    max-width: 100%; /* Permettre aux témoignages de prendre toute la largeur */
+  }
 }
 @media (min-width: 768px) and (max-width: 1023px) {
   .marquee-col--lg { display: none; }
+  .marquee-col {
+    max-width: 45%; 
+  }
 }
 
 /* Card blanche avec ombre légère, padding ~40px */
@@ -1062,6 +1068,14 @@ a {
 
   .testimonials__title {
     font-size: 24px;
+  }
+
+  .carousel__card-inner {
+    padding: 24px;
+  }
+  
+  .carousel__card {
+    padding: 0;
   }
 
   .contact {
