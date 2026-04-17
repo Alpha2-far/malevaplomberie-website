@@ -221,20 +221,11 @@
         <h2 class="testimonials__title">Ce Que Disent Nos Clients</h2>
         <p class="testimonials__subtitle">Note de 4.9 sur 5 · Basée sur les avis vérifiés de nos clients</p>
         
-        <!-- Carousel -->
-        <div class="carousel" role="region" aria-label="Carousel de témoignages" aria-roledescription="carousel">
-          <div class="carousel__track" aria-live="polite">
-            <!-- Injected statically via JS -->
-          </div>
-        </div>
-        
-        <!-- Navigation: dots + arrows -->
-        <div class="carousel__nav" aria-label="Navigation du carousel">
-          <button class="carousel__arrow carousel__arrow--prev" aria-label="Témoignage précédent">‹</button>
-          <div class="carousel__dots">
-            <!-- Injected via JS -->
-          </div>
-          <button class="carousel__arrow carousel__arrow--next" aria-label="Témoignage suivant">›</button>
+        <!-- Infinite Scrolling Columns -->
+        <div class="testimonials-marquee" aria-label="Témoignages qui défilent">
+          <div class="marquee-col" style="--duration: 15s;" id="marquee-col-1"></div>
+          <div class="marquee-col marquee-col--md" style="--duration: 19s;" id="marquee-col-2"></div>
+          <div class="marquee-col marquee-col--lg" style="--duration: 17s;" id="marquee-col-3"></div>
         </div>
         
         <!-- CTA: texte centré + bouton -->

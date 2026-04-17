@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
   initParallax();
   initScrollAnimations();
-  initCarousel();
+  initMarquee();
   initSmoothScroll();
   initMobileNav();
 });
@@ -143,134 +143,42 @@ const reviewsList = [
   { quote: "Travail hyper soigné pour le remplacement d'un réducteur de pression. Devis envoyé la veille, respecté. Mathieu est en plus très poli et ponctuel. Bravo l'équipe.", author: "Camille L." }
 ];
 
-function initCarousel() {
-  const track = document.querySelector('.carousel__track');
-  const dotsContainer = document.querySelector('.carousel__dots');
-  const prevBtn = document.querySelector('.carousel__arrow--prev');
-  const nextBtn = document.querySelector('.carousel__arrow--next');
+function initMarquee() {
+  const col1 = document.getElementById('marquee-col-1');
+  const col2 = document.getElementById('marquee-col-2');
+  const col3 = document.getElementById('marquee-col-3');
 
-  if (!track || !dotsContainer) return;
+  if (!col1) return;
 
-  // Generate slides and dots dynamically
-  track.innerHTML = '';
-  dotsContainer.innerHTML = '';
-  
-  reviewsList.forEach((review, index) => {
-    // Generate Slide
-    const slide = document.createElement('div');
-    slide.className = 'carousel__card';
-    slide.setAttribute('role', 'group');
-    slide.setAttribute('aria-roledescription', 'slide');
-    slide.setAttribute('aria-label', `Témoignage ${index + 1} sur ${reviewsList.length}`);
-    slide.innerHTML = `
-      <div class="carousel__card-inner">
-        <p class="carousel__quote">${review.quote}</p>
-        <p class="carousel__author">— ${review.author}</p>
-      </div>
-    `;
-    track.appendChild(slide);
+  // Distribute reviews into 3 groups
+  const groupSize = Math.ceil(reviewsList.length / 3);
+  const groups = [
+    reviewsList.slice(0, groupSize),
+    reviewsList.slice(groupSize, groupSize * 2),
+    reviewsList.slice(groupSize * 2)
+  ];
 
-    // Generate Dot
-    const dot = document.createElement('button');
-    dot.className = index === 0 ? 'carousel__dot active' : 'carousel__dot';
-    dot.setAttribute('aria-label', `Aller au témoignage ${index + 1}`);
-    dot.setAttribute('data-index', index);
-    dotsContainer.appendChild(dot);
-  });
+  const cols = [col1, col2, col3];
 
-  const cards = document.querySelectorAll('.carousel__card');
-  const dots = document.querySelectorAll('.carousel__dot');
-
-  if (cards.length === 0) return;
-
-  let currentIndex = 0;
-  let autoPlayInterval;
-  let touchStartX = 0;
-  let touchEndX = 0;
-  let isDragging = false;
-
-  function goToSlide(index) {
-    if (index < 0) index = cards.length - 1;
-    if (index >= cards.length) index = 0;
-    currentIndex = index;
-
-    track.style.transform = `translateX(-${currentIndex * 100}%)`;
-
-    // Update dots
-    dots.forEach((dot, i) => {
-      dot.classList.toggle('active', i === currentIndex);
+  cols.forEach((col, colIndex) => {
+    if (!col) return;
+    
+    let htmlContent = '';
+    
+    groups[colIndex].forEach((review) => {
+      htmlContent += `
+        <div class="carousel__card">
+          <div class="carousel__card-inner">
+            <p class="carousel__quote">${review.quote}</p>
+            <p class="carousel__author">— ${review.author}</p>
+          </div>
+        </div>
+      `;
     });
-  }
 
-  function nextSlide() {
-    goToSlide(currentIndex + 1);
-  }
-
-  function prevSlide() {
-    goToSlide(currentIndex - 1);
-  }
-
-  // Auto-play (5s interval)
-  function startAutoPlay() {
-    autoPlayInterval = setInterval(nextSlide, 5000);
-  }
-
-  function stopAutoPlay() {
-    clearInterval(autoPlayInterval);
-  }
-
-  function resetAutoPlay() {
-    stopAutoPlay();
-    startAutoPlay();
-  }
-
-  // Arrow navigation
-  if (nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); resetAutoPlay(); });
-  if (prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); resetAutoPlay(); });
-
-  // Dot navigation
-  dots.forEach((dot, i) => {
-    dot.addEventListener('click', () => { goToSlide(i); resetAutoPlay(); });
+    // Duplicate content once to create a seamless infinite scroll loop (CSS animation translates by -50%)
+    col.innerHTML = htmlContent + htmlContent;
   });
-
-  // Touch/swipe support
-  track.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-    isDragging = true;
-    stopAutoPlay();
-  }, { passive: true });
-
-  track.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
-    touchEndX = e.changedTouches[0].screenX;
-  }, { passive: true });
-
-  track.addEventListener('touchend', () => {
-    if (!isDragging) return;
-    isDragging = false;
-    const diff = touchStartX - touchEndX;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) nextSlide();
-      else prevSlide();
-    }
-    startAutoPlay();
-  });
-
-  // Keyboard navigation
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') { prevSlide(); resetAutoPlay(); }
-    if (e.key === 'ArrowRight') { nextSlide(); resetAutoPlay(); }
-  });
-
-  // Start auto-play
-  startAutoPlay();
-
-  // Pause on hover
-  const carousel = document.querySelector('.carousel');
-  if (carousel) {
-    carousel.addEventListener('mouseenter', stopAutoPlay);
-    carousel.addEventListener('mouseleave', startAutoPlay);
-  }
 }
 
 /* ============================================================
