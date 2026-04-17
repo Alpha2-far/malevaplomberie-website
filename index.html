@@ -272,9 +272,14 @@
             </div>
           </div>
           
-          <!-- Contact form -->
+          <!-- Contact form via Web3Forms -->
           <div class="contact__form-wrapper">
-             <form class="contact__form" action="mailto:malevaplomberie@gmail.com" method="post" enctype="text/plain">
+             <form class="contact__form" action="https://api.web3forms.com/submit" method="POST">
+               <!-- REMPLACER LA VALEUR CI-DESSOUS PAR VOTRE CLÉ WEB3FORMS -->
+               <input type="hidden" name="access_key" value="VOTRE_CLE_ICI">
+               <input type="hidden" name="subject" value="Nouveau message de contact - Maleva Plomberie">
+               <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+               
                <div class="form-group">
                  <label for="name">Votre Nom</label>
                  <input type="text" id="name" name="Nom" required placeholder="Jean Dupont">
